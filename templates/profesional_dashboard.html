@@ -1,0 +1,6 @@
+<h1>Profesionales Registrados</h1>
+<ul>
+    {% for profesional in profesionales %}
+        <li>{{ profesional[0] }} {{ profesional[1] }} - {{ profesional[2] }} - Tel: {{ profesional[3] }}</li>
+    {% endfor %}
+</ul>

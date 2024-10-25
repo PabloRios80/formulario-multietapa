@@ -1,0 +1,127 @@
+<form action="{{ url_for('agregar_usuario') }}" method="POST">
+    <!-- Campos existentes -->
+    <div class="form-group">
+        <label for="mamografia">Mamografía:</label>
+        <select name="mamografia" id="mamografia" class="form-control" onchange="mostrarPrestadores('mamografia', this.value)">
+            <option value="pendiente">Pendiente</option>
+            <option value="si">Sí</option>
+            <option value="no">No</option>
+        </select>
+    </div>
+
+    <div class="form-group" id="prestadores_mamografia" style="display:none;">
+        <label for="prestador_mamografia">Selecciona un Prestador:</label>
+        <select name="prestador_mamografia" id="prestador_mamografia" class="form-control">
+            <!-- Aquí se deben cargar los prestadores -->
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="laboratorio">Laboratorio:</label>
+        <select name="laboratorio" id="laboratorio" class="form-control" onchange="mostrarOpcionesLaboratorio(this.value)">
+            <option value="pendiente">Pendiente</option>
+            <option value="si">Sí</option>
+            <option value="no">No</option>
+        </select>
+    </div>
+
+    <div class="form-group" id="opciones_laboratorio" style="display:none;">
+        <label for="tipo_laboratorio">Tipo de Laboratorio:</label>
+        <select name="tipo_laboratorio" id="tipo_laboratorio" class="form-control">
+            <option value="pediatrico">Pediátrico</option>
+            <option value="adulto_masculino">Adulto Masculino</option>
+            <option value="adulto_femenino">Adulto Femenino</option>
+            <option value="odontologo">Odontólogo</option>
+        </select>
+        <div id="con_enseno" style="display:none;">
+            <label for="enseno">Enseñanza:</label>
+            <select name="enseno" id="enseno" class="form-control">
+                <option value="con">Con enseñanza</option>
+                <option value="sin">Sin enseñanza</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="agudeza_visual">Agudeza Visual:</label>
+        <select name="agudeza_visual" id="agudeza_visual" class="form-control">
+            <option value="pendiente">Pendiente</option>
+            <option value="si">Sí</option>
+            <option value="no">No</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="espirometria">Espirometría:</label>
+        <select name="espirometria" id="espirometria" class="form-control">
+            <option value="pendiente">Pendiente</option>
+            <option value="si">Sí</option>
+            <option value="no">No</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="densitometria">Densitometría:</label>
+        <select name="densitometria" id="densitometria" class="form-control" onchange="mostrarPrestadores('densitometria', this.value)">
+            <option value="pendiente">Pendiente</option>
+            <option value="si">Sí</option>
+            <option value="no">No</option>
+        </select>
+    </div>
+
+    <div class="form-group" id="prestadores_densitometria" style="display:none;">
+        <label for="prestador_densitometria">Selecciona un Prestador:</label>
+        <select name="prestador_densitometria" id="prestador_densitometria" class="form-control">
+            <!-- Aquí se deben cargar los prestadores -->
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="vcc">VCC:</label>
+        <select name="vcc" id="vcc" class="form-control" onchange="mostrarPrestadores('vcc', this.value)">
+            <option value="pendiente">Pendiente</option>
+            <option value="si">Sí</option>
+            <option value="no">No</option>
+        </select>
+    </div>
+
+    <div class="form-group" id="prestadores_vcc" style="display:none;">
+        <label for="prestador_vcc">Selecciona un Prestador:</label>
+        <select name="prestador_vcc" id="prestador_vcc" class="form-control">
+            <!-- Aquí se deben cargar los prestadores -->
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+
+<script>
+    function mostrarPrestadores(campo, valor) {
+        if (valor === "si") {
+            document.getElementById('prestadores_' + campo).style.display = 'block';
+        } else {
+            document.getElementById('prestadores_' + campo).style.display = 'none';
+        }
+    }
+
+    function mostrarOpcionesLaboratorio(valor) {
+        const opcionesLaboratorio = document.getElementById('opciones_laboratorio');
+        const conEnsenanza = document.getElementById('con_enseno');
+
+        if (valor === "si") {
+            opcionesLaboratorio.style.display = 'block';
+        } else {
+            opcionesLaboratorio.style.display = 'none';
+            conEnsenanza.style.display = 'none'; // Ocultar también si se cambia a no
+        }
+    }
+
+    document.getElementById('tipo_laboratorio').addEventListener('change', function() {
+        const enseno = document.getElementById('enseno');
+        if (this.value !== 'odontologo') {
+            enseno.style.display = 'block';
+        } else {
+            enseno.style.display = 'none';
+        }
+    });
+</script>

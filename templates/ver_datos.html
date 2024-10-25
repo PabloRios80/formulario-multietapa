@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Datos</title>
+    <link rel="stylesheet" href="static/styles.css"> <!-- Asegúrate de incluir tu CSS -->
+</head>
+<body>
+    <h1>Datos Cargados</h1>
+    <table border="1">
+        <tr>
+            <th>DNI</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Teléfono</th>
+            <th>Profesional</th>
+            <th>Especialidad</th>
+            <th>Fecha de Turno</th>
+            <th>Hora de Turno</th>
+            <th>Modalidad Paciente</th>
+            <th>Antigüedad</th>
+            <th>HPV</th>
+            <th>SOMF</th>
+            </tr>
+            {% for fila in datos %}
+            <tr>
+                <td>{{ fila[0] }}</td>  <!-- DNI -->
+                <td>{{ fila[1] }}</td>  <!-- Nombre -->
+                <td>{{ fila[2] }}</td>  <!-- Apellido -->
+                <td>{{ fila[3] }}</td>  <!-- Teléfono -->
+                <td>{{ fila[4] }}</td>  <!-- Profesional -->
+                <td>{{ fila[5] }}</td>  <!-- Especialidad -->
+                <td>{{ fila[6] }}</td>  <!-- Fecha de Turno -->
+                <td>{{ fila[7] }}</td>  <!-- Hora de Turno -->
+                <td>{{ fila[8] }}</td>  <!-- Modalidad Paciente -->
+                <td>{{ fila[9] }}</td>  <!-- Antigüedad -->
+                <td>{{ fila[10] }}</td>  <!-- HPV -->
+                <td>{{ fila[11] }}</td>  <!-- SOMF -->
+            </tr>
+            {% endfor %}
+        </table>
+        <a href="{{ url_for('formulario') }}">Volver al formulario</a>
+</body>
+</html>

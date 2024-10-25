@@ -1,0 +1,102 @@
+<form method="POST">
+    <label>DNI:</label>
+    <input type="text" name="dni" required><br>
+
+    <label>Nombre:</label>
+    <input type="text" name="nombre" required><br>
+
+    <label>Apellido:</label>
+    <input type="text" name="apellido" required><br>
+
+    <label>Teléfono:</label>
+    <input type="text" name="telefono" required><br>
+
+    <label>Profesional:</label>
+    <select name="profesional">
+        <option value="Dr. A">Dr. A</option>
+        <option value="Dr. B">Dr. B</option>
+        <option value="Dr. C">Dr. C</option>
+    </select><br>
+
+    <label>Especialidad:</label>
+    <select name="especialidad">
+        <option value="Pediatría">Pediatría</option>
+        <option value="Cardiología">Cardiología</option>
+        <option value="Dermatología">Dermatología</option>
+    </select><br>
+
+    <label>Fecha de Turno:</label>
+    <input type="date" name="fecha_turno" required><br>
+
+    <label>Hora de Turno:</label>
+    <input type="time" name="hora_turno" required><br>
+
+    <label>Modalidad Paciente:</label>
+    <select name="modalidad_paciente">
+        <option value="presencial">Presencial</option>
+        <option value="telemedicina">Telemedicina</option>
+    </select><br>
+
+    <label>Antigüedad:</label>
+    <select name="antiguedad">
+        <option value="primera vez">Primera vez</option>
+        <option value="segunda vez">Segunda vez</option>
+    </select><br>
+
+    <label>HPV:</label>
+    <select name="hpv">
+        <option value="se entrega autotoma">Se entrega autotoma</option>
+        <option value="no se entrega autotoma">No se entrega autotoma</option>
+    </select><br>
+
+    <label>SOMF:</label>
+    <select name="somf">
+        <option value="se entrega autotoma">Se entrega autotoma</option>
+        <option value="no se entrega autotoma">No se entrega autotoma</option>
+    <input type="text" name="somf" required><br>
+
+    <label>Mamografía:</label>
+    <select name="mamografia">
+        <option value="si">Sí</option>
+        <option value="no">No</option>
+        <option value="pendiente">Pendiente</option>
+    </select><br>
+
+    <label>Laboratorio:</label>
+    <select name="laboratorio">
+        <option value="si">Sí</option>
+        <option value="no">No</option>
+        <option value="pendiente">Pendiente</option>
+    </select><br>
+
+    <label>Agudeza Visual:</label>
+    <select name="agudeza_visual">
+        <option value="si">Sí</option>
+        <option value="no">No</option>
+        <option value="pendiente">Pendiente</option>
+    </select><br>
+
+    <label>Espirometría:</label>
+    <select name="espirometria">
+        <option value="si">Sí</option>
+        <option value="no">No</option>
+        <option value="pendiente">Pendiente</option>
+    </select><br>
+
+    <label>Densitometría:</label>
+    <select name="densitometria">
+        <option value="si">Sí</option>
+        <option value="no">No</option>
+        <option value="pendiente">Pendiente</option>
+    </select><br>
+
+    <label>VCC:</label>
+    <select name="vcc">
+        <option value="si">Sí</option>
+        <option value="no">No</option>
+        <option value="pendiente">Pendiente</option>
+    </select><br>
+
+    <input type="submit" value="Guardar">
+</form>
+<a href="{{ url_for('ver_datos') }}">Ver todos los datos</a>
