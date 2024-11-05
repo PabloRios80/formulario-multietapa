@@ -1,127 +1,45 @@
-<form action="{{ url_for('agregar_usuario') }}" method="POST">
-    <!-- Campos existentes -->
-    <div class="form-group">
-        <label for="mamografia">Mamografía:</label>
-        <select name="mamografia" id="mamografia" class="form-control" onchange="mostrarPrestadores('mamografia', this.value)">
-            <option value="pendiente">Pendiente</option>
-            <option value="si">Sí</option>
-            <option value="no">No</option>
-        </select>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Usuario</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Agregar Nuevo Usuario</h2>
+
+        <!-- Mostrar un mensaje si se ha agregado el usuario correctamente -->
+        {% if message %}
+            <p class="message">{{ message }}</p>
+        {% endif %}
+
+        <!-- Formulario específico para agregar un usuario -->
+        <form action="{{ url_for('agregar_usuario') }}" method="POST">
+            <div class="form-group">
+                <label for="username">Nombre de usuario:</label>
+                <input type="text" id="username" name="username" placeholder="Ingrese el nombre de usuario" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" name="password" placeholder="Ingrese la contraseña" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="role">Rol:</label>
+                <select id="role" name="role" required>
+                    <option value="admin">Administrador</option>
+                    <option value="user">Usuario</option>
+                </select>
+            </div>
+            
+            <button type="submit">Agregar Usuario</button>
+        </form>
+
+        <!-- Enlace para volver al panel de administración -->
+        <p><a href="{{ url_for('admin_dashboard') }}">Volver al Panel de Administración</a></p>
     </div>
-
-    <div class="form-group" id="prestadores_mamografia" style="display:none;">
-        <label for="prestador_mamografia">Selecciona un Prestador:</label>
-        <select name="prestador_mamografia" id="prestador_mamografia" class="form-control">
-            <!-- Aquí se deben cargar los prestadores -->
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="laboratorio">Laboratorio:</label>
-        <select name="laboratorio" id="laboratorio" class="form-control" onchange="mostrarOpcionesLaboratorio(this.value)">
-            <option value="pendiente">Pendiente</option>
-            <option value="si">Sí</option>
-            <option value="no">No</option>
-        </select>
-    </div>
-
-    <div class="form-group" id="opciones_laboratorio" style="display:none;">
-        <label for="tipo_laboratorio">Tipo de Laboratorio:</label>
-        <select name="tipo_laboratorio" id="tipo_laboratorio" class="form-control">
-            <option value="pediatrico">Pediátrico</option>
-            <option value="adulto_masculino">Adulto Masculino</option>
-            <option value="adulto_femenino">Adulto Femenino</option>
-            <option value="odontologo">Odontólogo</option>
-        </select>
-        <div id="con_enseno" style="display:none;">
-            <label for="enseno">Enseñanza:</label>
-            <select name="enseno" id="enseno" class="form-control">
-                <option value="con">Con enseñanza</option>
-                <option value="sin">Sin enseñanza</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="agudeza_visual">Agudeza Visual:</label>
-        <select name="agudeza_visual" id="agudeza_visual" class="form-control">
-            <option value="pendiente">Pendiente</option>
-            <option value="si">Sí</option>
-            <option value="no">No</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="espirometria">Espirometría:</label>
-        <select name="espirometria" id="espirometria" class="form-control">
-            <option value="pendiente">Pendiente</option>
-            <option value="si">Sí</option>
-            <option value="no">No</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="densitometria">Densitometría:</label>
-        <select name="densitometria" id="densitometria" class="form-control" onchange="mostrarPrestadores('densitometria', this.value)">
-            <option value="pendiente">Pendiente</option>
-            <option value="si">Sí</option>
-            <option value="no">No</option>
-        </select>
-    </div>
-
-    <div class="form-group" id="prestadores_densitometria" style="display:none;">
-        <label for="prestador_densitometria">Selecciona un Prestador:</label>
-        <select name="prestador_densitometria" id="prestador_densitometria" class="form-control">
-            <!-- Aquí se deben cargar los prestadores -->
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="vcc">VCC:</label>
-        <select name="vcc" id="vcc" class="form-control" onchange="mostrarPrestadores('vcc', this.value)">
-            <option value="pendiente">Pendiente</option>
-            <option value="si">Sí</option>
-            <option value="no">No</option>
-        </select>
-    </div>
-
-    <div class="form-group" id="prestadores_vcc" style="display:none;">
-        <label for="prestador_vcc">Selecciona un Prestador:</label>
-        <select name="prestador_vcc" id="prestador_vcc" class="form-control">
-            <!-- Aquí se deben cargar los prestadores -->
-        </select>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Guardar</button>
-</form>
-
-<script>
-    function mostrarPrestadores(campo, valor) {
-        if (valor === "si") {
-            document.getElementById('prestadores_' + campo).style.display = 'block';
-        } else {
-            document.getElementById('prestadores_' + campo).style.display = 'none';
-        }
-    }
-
-    function mostrarOpcionesLaboratorio(valor) {
-        const opcionesLaboratorio = document.getElementById('opciones_laboratorio');
-        const conEnsenanza = document.getElementById('con_enseno');
-
-        if (valor === "si") {
-            opcionesLaboratorio.style.display = 'block';
-        } else {
-            opcionesLaboratorio.style.display = 'none';
-            conEnsenanza.style.display = 'none'; // Ocultar también si se cambia a no
-        }
-    }
-
-    document.getElementById('tipo_laboratorio').addEventListener('change', function() {
-        const enseno = document.getElementById('enseno');
-        if (this.value !== 'odontologo') {
-            enseno.style.display = 'block';
-        } else {
-            enseno.style.display = 'none';
-        }
-    });
-</script>
+</body>
+</html>

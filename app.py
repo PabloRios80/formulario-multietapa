@@ -5,7 +5,8 @@ from flask import Flask, render_template, request, redirect, url_for, session
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'  # For session management
 
-db_path = 'C:/Users/Informatica/Desktop/formulario-multietapa/database.db'
+# Esto obtiene el directorio actual de donde está el archivo app.py
+db_path = os.path.join(os.path.dirname(__file__), 'database.db')
 
 # Function to initialize the database
 def init_db():
@@ -258,7 +259,7 @@ def formulario():
                             fecha_turno, hora_turno, modalidad_paciente, antiguedad, 
                             hpv, somf, mamografia, laboratorio, agudeza_visual, 
                             espirometria, densitometria, vcc)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
             (dni, nombre, apellido, telefono, profesional, especialidad, fecha_turno, hora_turno,
                             modalidad_paciente, antiguedad, hpv, somf, mamografia, laboratorio, agudeza_visual,
                             espirometria, densitometria, vcc))
@@ -269,7 +270,22 @@ def formulario():
         finally:
             conn.close()
 
-    return render_template('formulario.html')
+    # Si la solicitud es GET, obtenemos la lista de profesionales
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT nombre FROM profesionales")  # Cambia esto según la columna que quieras mostrar
+        profesionales = cursor.fetchall()
+    except sqlite3.Error as e:
+        return f"Error al obtener los profesionales: {e}", 500
+    finally:
+        conn.close()
+
+    # Convertimos la lista de profesionales a una lista de nombres
+    lista_profesionales = [prof[0] for prof in profesionales]
+
+    return render_template('formulario.html', profesionales=lista_profesionales)
+
 
 @app.route('/ver_datos')
 def ver_datos():

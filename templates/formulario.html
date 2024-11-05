@@ -11,11 +11,12 @@
     <label>Teléfono:</label>
     <input type="text" name="telefono" required><br>
 
-    <label>Profesional:</label>
-    <select name="profesional">
-        <option value="Dr. A">Dr. A</option>
-        <option value="Dr. B">Dr. B</option>
-        <option value="Dr. C">Dr. C</option>
+    <label for="profesional">Profesional:</label>
+    <select name="profesional" required>
+        <option value="">Selecciona un profesional</option>
+        {% for profesional in profesionales %}
+            <option value="{{ profesional }}">{{ profesional }}</option>
+        {% endfor %}
     </select><br>
 
     <label>Especialidad:</label>
@@ -23,7 +24,7 @@
         <option value="Pediatría">Pediatría</option>
         <option value="Cardiología">Cardiología</option>
         <option value="Dermatología">Dermatología</option>
-    </select><br>
+    </select><br> <!-- Agregado el cierre de la etiqueta select -->
 
     <label>Fecha de Turno:</label>
     <input type="date" name="fecha_turno" required><br>
@@ -53,7 +54,7 @@
     <select name="somf">
         <option value="se entrega autotoma">Se entrega autotoma</option>
         <option value="no se entrega autotoma">No se entrega autotoma</option>
-    <input type="text" name="somf" required><br>
+    </select><br>
 
     <label>Mamografía:</label>
     <select name="mamografia">
@@ -99,4 +100,5 @@
 
     <input type="submit" value="Guardar">
 </form>
+
 <a href="{{ url_for('ver_datos') }}">Ver todos los datos</a>
