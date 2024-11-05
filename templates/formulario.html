@@ -58,10 +58,14 @@
 
     <label>Mamografía:</label>
     <select name="mamografia">
+        <option value="-">-</option>
         <option value="si">Sí</option>
         <option value="no">No</option>
         <option value="pendiente">Pendiente</option>
     </select><br>
+
+    <!-- Botón para cargar turno de mamografía -->
+    <a href="{{ url_for('turno_mamografia') }}" class="btn">Cargar turno</a>
 
     <label>Laboratorio:</label>
     <select name="laboratorio">

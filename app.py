@@ -14,6 +14,20 @@ def init_db():
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
+
+        # Crear tabla turno_mamografia
+    cursor.execute('''CREATE TABLE IF NOT EXISTS turno_mamografia (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            dni TEXT NOT NULL,
+            nombre TEXT NOT NULL,
+            apellido TEXT NOT NULL,
+            telefono TEXT NOT NULL,
+            prestador TEXT,
+            fecha_turno DATE,
+            hora_turno TIME,
+            resultados_mamografia BLOB
+        )''')
+
     # Create user data table
     cursor.execute('''CREATE TABLE IF NOT EXISTS user_data (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -251,7 +265,7 @@ def formulario():
         espirometria = request.form['espirometria']
         densitometria = request.form['densitometria']
         vcc = request.form['vcc']
-
+        
         try:
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
@@ -264,6 +278,7 @@ def formulario():
                             modalidad_paciente, antiguedad, hpv, somf, mamografia, laboratorio, agudeza_visual,
                             espirometria, densitometria, vcc))
             conn.commit()
+            
             return 'Usuario agregado correctamente.'
         except sqlite3.Error as e:
             return f"Error en la base de datos: {e}", 500
@@ -286,6 +301,60 @@ def formulario():
 
     return render_template('formulario.html', profesionales=lista_profesionales)
 
+@app.route('/turno_mamografia', methods=['GET', 'POST'])
+def turno_mamografia():
+    if request.method == 'POST':
+        dni = request.form['dni']
+        nombre = request.form['nombre']
+        apellido = request.form['apellido']
+        telefono = request.form['telefono']
+        prestador = request.form['prestador']
+        fecha_turno = request.form['fecha_turno']
+        hora_turno = request.form['hora_turno']
+        
+        # Obtener el archivo de resultados de mamografía
+        resultados_file = request.files['resultados_mamografia']
+        
+        # Leer el contenido binario del archivo para guardarlo en la base de datos
+        resultados_data = resultados_file.read() if resultados_file else None
+
+        # Guardar los datos en la tabla `turno_mamografia`
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO turno_mamografia (dni, nombre, apellido, telefono, prestador, fecha_turno, hora_turno, resultados_mamografia)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (dni, nombre, apellido, telefono, prestador, fecha_turno, hora_turno, resultados_data))
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for('formulario'))  # Redirige al formulario principal tras guardar los datos
+
+    return render_template('turno_mamografia.html')
+
+
+    # Si la solicitud es GET, se muestra el formulario
+    dni = request.args.get('dni')
+    nombre = request.args.get('nombre')
+    apellido = request.args.get('apellido')
+    telefono = request.args.get('telefono')
+
+    # Obtener la lista de prestadores
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT nombre FROM prestadores")
+        prestadores = cursor.fetchall()
+    except sqlite3.Error as e:
+        return f"Error al obtener los prestadores: {e}", 500
+    finally:
+        conn.close()
+
+    lista_prestadores = [prestador[0] for prestador in prestadores]
+
+    return render_template('turno_mamografia.html', dni=dni, nombre=nombre, 
+                    apellido=apellido, telefono=telefono, 
+                    prestadores=lista_prestadores)
 
 @app.route('/ver_datos')
 def ver_datos():
