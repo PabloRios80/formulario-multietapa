@@ -1,27 +1,31 @@
-<form method="post" enctype="multipart/form-data">
+<form method="POST" enctype="multipart/form-data">
     <label for="dni">DNI:</label>
-    <input type="text" name="dni" required>
+    <input type="text" id="dni" name="dni" value="{{ dni if dni else '' }}" readonly><br>
 
     <label for="nombre">Nombre:</label>
-    <input type="text" name="nombre" required>
+    <input type="text" id="nombre" name="nombre" value="{{ nombre if nombre else '' }}" readonly><br>
 
     <label for="apellido">Apellido:</label>
-    <input type="text" name="apellido" required>
+    <input type="text" id="apellido" name="apellido" value="{{ apellido if apellido else '' }}" readonly><br>
 
     <label for="telefono">Teléfono:</label>
-    <input type="text" name="telefono" required>
+    <input type="text" id="telefono" name="telefono" value="{{ telefono if telefono else '' }}" readonly><br>
 
     <label for="prestador">Prestador:</label>
-    <input type="text" name="prestador" required>
+    <select id="prestador" name="prestador">
+        {% for prestador in prestadores %}
+            <option value="{{ prestador }}">{{ prestador }}</option>
+        {% endfor %}
+    </select><br>
 
-    <label for="fecha_turno">Fecha del Turno:</label>
-    <input type="date" name="fecha_turno" required>
+    <label for="fecha_turno">Fecha de Turno:</label>
+    <input type="date" id="fecha_turno" name="fecha_turno" required><br>
 
-    <label for="hora_turno">Hora del Turno:</label>
-    <input type="time" name="hora_turno" required>
+    <label for="hora_turno">Hora de Turno:</label>
+    <input type="time" id="hora_turno" name="hora_turno" required><br>
 
     <label for="resultados_mamografia">Resultados de Mamografía:</label>
-    <input type="file" name="resultados_mamografia" required>
+    <input type="file" id="resultados_mamografia" name="resultados_mamografia"><br>
 
-    <button type="submit">Guardar</button>
+    <button type="submit">Guardar Turno de Mamografía</button>
 </form>
