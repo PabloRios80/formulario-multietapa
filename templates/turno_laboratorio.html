@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Turno de Laboratorio</title>
+</head>
+<body>
+    <h2>Cargar Turno de Laboratorio</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <label for="dni">DNI:</label>
+        <input type="text" name="dni" id="dni" value="{{ dni }}" readonly><br>
+        
+        <label for="nombre">Nombre:</label>
+        <input type="text" name="nombre" id="nombre" value="{{ nombre }}" readonly><br>
+        
+        <label for="apellido">Apellido:</label>
+        <input type="text" name="apellido" id="apellido" value="{{ apellido }}" readonly><br>
+        
+        <label for="telefono">Teléfono:</label>
+        <input type="text" name="telefono" id="telefono" value="{{ telefono }}" readonly><br>
+
+        <!-- Campos específicos del laboratorio -->
+        <label for="PPDTE_Hepatitis_B_Antígeno_de_Superficie_Ag_HBs">Hepatitis B:</label>
+        <input type="text" name="PPDTE_Hepatitis_B_Antígeno_de_Superficie_Ag_HBs" required><br>
+
+        <label for="PPDTE_Hepatitis_C_Ac_IgG_Anti_HCV_Ac_IgG">Hepatitis C:</label>
+        <input type="text" name="PPDTE_Hepatitis_C_Ac_IgG_Anti_HCV_Ac_IgG" required><br>
+
+        <label for="PPDTE_VDRL">VDRL:</label>
+        <input type="text" name="PPDTE_VDRL" required><br>
+
+        <label for="PPDTE_Anticuerpos_Anti_HIV_ELISA">VDRL:</label>
+        <input type="text" name="PPDTE_Anticuerpos_Anti_HIV_ELISA" required><br>
+
+        <label for="PPDTE_Colesterol_Total">VDRL:</label>
+        <input type="text" name="PPDTE_Colesterol_Total" required><br>
+
+        <label for="PPDTE_Colesterol_HDL">VDRL:</label>
+        <input type="text" name="PPDTE_Colesterol_HDL" required><br>
+
+        <label for="PPDTE_Triglicéridos">VDRL:</label>
+        <input type="text" name="PPDTE_Triglicéridos" required><br>
+
+        <label for="PPDTE_Glucemia">VDRL:</label>
+        <input type="text" name="PPDTE_Glucemia" required><br>
+
+        <label for="PPDTE_Creatinina_en_Sangre">VDRL:</label>
+        <input type="text" name="PPDTE_Creatinina_en_Sangre" required><br>
+
+
+        <label for="PPDTE_Índice_de_Lesión_Renal_Urinario">VDRL:</label>
+        <input type="text" name="PPDTE_Índice_de_Lesión_Renal_Urinario" required><br>
+
+
+        <label for="PPDTE_Papiloma_Virus_Humano_HPV">VDRL:</label>
+        <input type="text" name="PPDTE_Papiloma_Virus_Humano_HPV" required><br>
+
+
+        <label for="PPDTE_Sangre_oculta_en_materia_fecal_SOMF_inmunológico">VDRL:</label>
+        <input type="text" name="PPDTE_Sangre_oculta_en_materia_fecal_SOMF_inmunológico" required><br>
+
+        <label for="resultados_laboratorio">Resultados de Laboratorio (Archivo):</label>
+        <input type="file" name="resultados_laboratorio"><br>
+
+        <button type="submit">Guardar Turno</button>
+    </form>
+</body>
+</html>

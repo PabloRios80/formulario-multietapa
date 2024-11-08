@@ -107,4 +107,17 @@
     <input type="submit" value="Guardar">
 </form>
 
+{% if mostrar_boton_turno_mamografia %}
+    <form action="{{ url_for('turno_mamografia') }}" method="GET">
+        <button type="submit">Cargar Turno de Mamografía</button>
+    </form>
+{% endif %}
+
+{% if mostrar_boton_turno_laboratorio %}
+    <form action="{{ url_for('turno_laboratorio') }}" method="GET">
+        <button type="submit">Cargar Turno de Laboratorio</button>
+    </form>
+{% endif %}
+
+
 <a href="{{ url_for('ver_datos') }}">Ver todos los datos</a>

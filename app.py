@@ -14,6 +14,32 @@ def init_db():
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
+        # Crear tabla turno_laboratorio
+    cursor.execute('''CREATE TABLE IF NOT EXISTS turno_laboratorio (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            dni TEXT NOT NULL,
+            nombre TEXT NOT NULL,
+            apellido TEXT NOT NULL,
+            telefono TEXT NOT NULL,
+            prestador TEXT,
+            fecha_turno DATE,
+            hora_turno TIME,
+            PPDTE_Hepatitis_B_Antígeno_de_Superficie_Ag_HBs TEXT NOT NULL,
+            PPDTE_Hepatitis_C_Ac_IgG_Anti_HCV_Ac_IgG TEXT NOT NULL,
+            PPDTE_VDRL TEXT NOT NULL,
+            PPDTE_Anticuerpos_Anti_HIV_ELISA TEXT NOT NULL,
+            PPDTE_Colesterol_Total TEXT NOT NULL,
+            PPDTE_Colesterol_HDL TEXT NOT NULL,
+            PPDTE_Triglicéridos TEXT NOT NULL,
+            PPDTE_Glucemia TEXT NOT NULL,
+            PPDTE_Creatinina_en_Sangre TEXT NOT NULL,
+            PPDTE_Índice_de_Lesión_Renal_Urinario TEXT NOT NULL,
+            PPDTE_Papiloma_Virus_Humano_HPV TEXT NOT NULL,
+            PPDTE_Sangre_oculta_en_materia_fecal_SOMF_inmunológico TEXT NOT NULL,
+            resultados_laboratorio BLOB
+        )''')
+
+
         # Crear tabla turno_mamografia
     cursor.execute('''CREATE TABLE IF NOT EXISTS turno_mamografia (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -241,12 +267,14 @@ def agregar_prestador():
 
 @app.route('/formulario', methods=['GET', 'POST'])
 def formulario():
-    """Permite a los operadores ingresar datos de un nuevo usuario."""
+    """Allows data loaders to enter new user data."""
     if 'username' not in session:
         return redirect(url_for('login'))
 
+    mostrar_boton_turno_mamografia = False
+    mostrar_boton_turno_laboratorio = False
+
     if request.method == 'POST':
-        # Obtener los datos del formulario
         dni = request.form['dni']
         nombre = request.form['nombre']
         apellido = request.form['apellido']
@@ -265,8 +293,25 @@ def formulario():
         espirometria = request.form['espirometria']
         densitometria = request.form['densitometria']
         vcc = request.form['vcc']
-        
-        # Guardar los datos del paciente en la base de datos
+
+    if request.method == 'POST':
+        mamografia = request.form.get('mamografia', '').lower()
+        if mamografia.lower() == 'si':
+                # Redirigir al formulario de carga de turno de mamografía con los datos precargados
+                return redirect(url_for('turno_mamografia', dni=dni, nombre=nombre, apellido=apellido, telefono=telefono))
+        laboratorio = request.form.get('laboratorio', '').lower()
+        if mamografia.lower() == 'si':
+                # Redirigir al formulario de carga 
+                return redirect(url_for('turno_laboratorio', dni=dni, nombre=nombre, apellido=apellido, telefono=telefono))
+
+        # Verifica si el campo mamografía es "Sí"
+        if mamografia.lower() == "sí":
+            mostrar_boton_turno_mamografia = True
+
+        # Verifica si el campo laboratorio es "Sí"
+        if laboratorio.lower() == "sí":
+            mostrar_boton_turno_laboratorio = True
+
         try:
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
@@ -280,35 +325,32 @@ def formulario():
                             espirometria, densitometria, vcc))
             conn.commit()
             
-            # Verificar si el campo mamografía es "Sí"
-            if mamografia.lower() == 'si':
-                # Redirigir al formulario de carga de turno de mamografía con los datos precargados
-                return redirect(url_for('turno_mamografia', dni=dni, nombre=nombre, apellido=apellido, telefono=telefono))
-
-            # Si no requiere turno de mamografía, mostrar mensaje de éxito
             return 'Usuario agregado correctamente.'
-        
         except sqlite3.Error as e:
             return f"Error en la base de datos: {e}", 500
-        
         finally:
             conn.close()
 
-    # Si la solicitud es GET, obtenemos la lista de profesionales para el desplegable
+    # Obtener la lista de profesionales
     try:
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
-        cursor.execute("SELECT nombre FROM profesionales")  # Cambia esto según la columna que quieras mostrar
+        cursor.execute("SELECT nombre FROM profesionales")
         profesionales = cursor.fetchall()
     except sqlite3.Error as e:
         return f"Error al obtener los profesionales: {e}", 500
     finally:
         conn.close()
 
-    # Convertir la lista de profesionales a una lista de nombres
     lista_profesionales = [prof[0] for prof in profesionales]
 
-    return render_template('formulario.html', profesionales=lista_profesionales)       
+    return render_template(
+        'formulario.html', 
+        profesionales=lista_profesionales,
+        mostrar_boton_turno_mamografia=mostrar_boton_turno_mamografia,
+        mostrar_boton_turno_laboratorio=mostrar_boton_turno_laboratorio
+    )
+
 
 @app.route('/turno_mamografia', methods=['GET', 'POST'])
 def turno_mamografia():
@@ -360,6 +402,54 @@ def turno_mamografia():
     # Renderizar el formulario de turno de mamografía con los datos precargados
     return render_template('turno_mamografia.html', dni=dni, nombre=nombre, apellido=apellido, 
                             telefono=telefono, prestadores=lista_prestadores)
+
+@app.route('/turno_laboratorio', methods=['GET', 'POST'])
+def turno_laboratorio():
+    if request.method == 'POST':
+        dni = request.form['dni']
+        nombre = request.form['nombre']
+        apellido = request.form['apellido']
+        telefono = request.form['telefono']
+        
+        # Campos de análisis de laboratorio
+        hepatitis_b = request.form['PPDTE_Hepatitis_B_Antígeno_de_Superficie_Ag_HBs']
+        hepatitis_c = request.form['PPDTE_Hepatitis_C_Ac_IgG_Anti_HCV_Ac_IgG']
+        vdrl = request.form['PPDTE_VDRL']
+        hiv = request.form['PPDTE_Anticuerpos_Anti_HIV_ELISA']
+        colesterol_total = request.form['PPDTE_Colesterol_Total']
+        colesterol_hdl = request.form['PPDTE_Colesterol_HDL']
+        trigliceridos = request.form['PPDTE_Triglicéridos']
+        glucemia = request.form['PPDTE_Glucemia']
+        creatinina = request.form['PPDTE_Creatinina_en_Sangre']
+        lesion_renal = request.form['PPDTE_Índice_de_Lesión_Renal_Urinario']
+        hpv = request.form['PPDTE_Papiloma_Virus_Humano_HPV']
+        somf = request.form['PPDTE_Sangre_oculta_en_materia_fecal_SOMF_inmunológico']
+        
+        resultados_file = request.files['resultados_laboratorio']
+        resultados_data = resultados_file.read() if resultados_file else None
+
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute('''INSERT INTO turno_laboratorio (
+            dni, nombre, apellido, telefono, 
+            PPDTE_Hepatitis_B_Antígeno_de_Superficie_Ag_HBs,
+            PPDTE_Hepatitis_C_Ac_IgG_Anti_HCV_Ac_IgG, PPDTE_VDRL,
+            PPDTE_Anticuerpos_Anti_HIV_ELISA, PPDTE_Colesterol_Total,
+            PPDTE_Colesterol_HDL, PPDTE_Triglicéridos, PPDTE_Glucemia,
+            PPDTE_Creatinina_en_Sangre, PPDTE_Índice_de_Lesión_Renal_Urinario,
+            PPDTE_Papiloma_Virus_Humano_HPV, PPDTE_Sangre_oculta_en_materia_fecal_SOMF_inmunológico,
+            resultados_laboratorio) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+            (dni, nombre, apellido, telefono, hepatitis_b, hepatitis_c, vdrl, hiv, 
+                colesterol_total, colesterol_hdl, trigliceridos, glucemia, creatinina, 
+                lesion_renal, hpv, somf, resultados_data)
+        )
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for('formulario'))
+
+    return render_template('turno_laboratorio.html',dni=dni, nombre=nombre, apellido=apellido, 
+                            telefono=telefono,)
 
 @app.route('/ver_datos')
 def ver_datos():
